@@ -71,6 +71,32 @@ declare global {
 			slug: { current: string }
 		}
 
+		interface Cat extends SanityDocument {
+			readonly _type: 'cat'
+			name: string
+			isAvailable?: boolean
+			gender?: 'male' | 'female'
+			estimatedAge?: string
+			ageGroup?: AgeGroup
+			weight?: string
+			declawed?: 'no' | 'front' | 'back' | 'both'
+			hair?: {
+				primaryColor?: HairColor
+				secondaryColor?: HairColor
+				length?: HairLength
+			}
+			type?: CatType
+			otherCats?: 'bonded' | 'cannot_be_only' | 'must_be_only' | 'best_as_only'
+			bondedCats?: Cat[]
+			goodWithDogs?: 'yes' | 'no'
+			fee?: string
+			link?: string
+			description?: any
+			gallery?: Image[]
+			metadata?: Metadata
+			language?: string
+		}
+
 		// miscellaneous
 
 		interface Announcement extends SanityDocument {
@@ -123,6 +149,26 @@ declare global {
 				title?: string
 				image?: Image
 			}
+		}
+
+		interface AgeGroup extends SanityDocument {
+			title: string
+			description?: string
+		}
+
+		interface CatType extends SanityDocument {
+			title: string
+			description?: string
+		}
+
+		interface HairColor extends SanityDocument {
+			title: string
+			description?: string
+		}
+
+		interface HairLength extends SanityDocument {
+			title: string
+			description?: string
 		}
 
 		// objects

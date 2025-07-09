@@ -12,16 +12,37 @@ import {
 import { languages } from '@/lib/i18n'
 import errors from '@/lib/errors'
 
+// Simple CatPage component
+function CatPage({ cat }: { cat: Sanity.Cat }) {
+	return (
+		<div className="container mx-auto px-4 py-8">
+			<h1 className="text-3xl font-bold mb-4">{cat.name}</h1>
+			{!cat.isAvailable && (
+				<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+					This cat is not currently available for adoption.
+				</div>
+			)}
+			{/* Add more cat details here */}
+		</div>
+	)
+}
+
 export default async function Page({ params }: Props) {
-	const page = await getPage(await params)
-	if (!page) notFound()
-	return <Modules modules={page.modules} page={page} />
+	const data = await getPage(await params)
+	if (!data) notFound()
+	
+	// Handle cat pages differently
+	if (data._type === 'cat') {
+		return <CatPage cat={data} />
+	}
+	
+	return <Modules modules={data.modules} page={data} />
 }
 
 export async function generateMetadata({ params }: Props) {
-	const page = await getPage(await params)
-	if (!page) notFound()
-	return processMetadata(page)
+	const data = await getPage(await params)
+	if (!data) notFound()
+	return processMetadata(data)
 }
 
 export async function generateStaticParams() {
@@ -35,11 +56,55 @@ export async function generateStaticParams() {
 		}`,
 	)
 
-	return slugs.map(({ slug }) => ({ slug: slug.split('/') }))
+	const catSlugs = await client.fetch<{ slug: string }[]>(
+		groq`*[
+			_type == 'cat' &&
+			defined(metadata.slug.current)
+		]{
+			'slug': 'cat/' + metadata.slug.current
+		}`,
+	)
+
+	return [...slugs, ...catSlugs].map(({ slug }) => ({ slug: slug.split('/') }))
 }
 
-async function getPage(params: Params) {
+async function getPage(params: Params): Promise<Sanity.Page | Sanity.Cat | undefined> {
 	const { slug, lang } = processSlug(params)
+
+	// Check if this is a cat route (starts with 'cat/')
+	if (slug.startsWith('cat/')) {
+		const catSlug = slug.replace('cat/', '')
+		const cat = await fetchSanityLive<Sanity.Cat>({
+			query: groq`*[
+				_type == 'cat' &&
+				metadata.slug.current == $catSlug
+				${lang ? `&& language == '${lang}'` : ''}
+			][0]{
+				...,
+				ageGroup->{ title },
+				type->{ title },
+				hair {
+					primaryColor->{ title },
+					secondaryColor->{ title },
+					length->{ title }
+				},
+				bondedCats[]->{
+					_id,
+					name,
+					metadata { slug }
+				},
+				metadata {
+					...,
+					'ogimage': image.asset->url + '?w=1200'
+				},
+			}`,
+			params: { catSlug },
+		})
+
+		if (cat) {
+			return cat
+		}
+	}
 
 	const page = await fetchSanityLive<Sanity.Page>({
 		query: groq`*[

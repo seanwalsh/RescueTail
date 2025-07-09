@@ -4,15 +4,38 @@ import type { Metadata } from 'next'
 import { DEFAULT_LANG } from './i18n'
 
 export default async function processMetadata(
-	page: (Sanity.Page | Sanity.BlogPost) & {
+	page: (Sanity.Page | Sanity.BlogPost | Sanity.Cat) & {
 		translations?: {
 			slug: string
 			language?: string
 		}[]
 	},
 ): Promise<Metadata> {
+	// Handle cat documents that might not have metadata
+	if (page._type === 'cat' && !page.metadata) {
+		const url = `${BASE_URL}/cat/${page.name.toLowerCase().replace(/\s+/g, '-')}`
+		return {
+			metadataBase: new URL(BASE_URL),
+			title: page.name,
+			description: `Meet ${page.name}, available for adoption.`,
+			openGraph: {
+				type: 'website',
+				url,
+				title: page.name,
+				description: `Meet ${page.name}, available for adoption.`,
+				images: `${BASE_URL}/api/og?title=${encodeURIComponent(page.name)}`,
+			},
+			robots: {
+				index: vercelPreview ? false : undefined,
+			},
+			alternates: {
+				canonical: url,
+			},
+		}
+	}
+	
 	const url = resolveUrl(page)
-	const { title, description, ogimage, noIndex } = page.metadata
+	const { title, description, ogimage, noIndex } = page.metadata!
 
 	return {
 		metadataBase: new URL(BASE_URL),

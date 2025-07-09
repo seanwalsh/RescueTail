@@ -6,6 +6,7 @@ import page from './documents/page'
 import globalModule from './documents/global-module'
 import blogPost from './documents/blog.post'
 import blogCategory from './documents/blog.category'
+import cat from './documents/cat'
 import navigation from './documents/navigation'
 import redirect from './documents/redirect'
 
@@ -16,6 +17,10 @@ import person from './misc/person'
 import pricing from './misc/pricing'
 import reputation from './misc/reputation'
 import testimonial from './misc/testimonial'
+import ageGroup from './misc/age-group'
+import catType from './misc/cat-type'
+import hairColor from './misc/hair-color'
+import hairLength from './misc/hair-length'
 
 // objects
 import cta from './objects/cta'
@@ -59,6 +64,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
 	globalModule,
 	blogPost,
 	blogCategory,
+	cat,
 	navigation,
 
 	// miscellaneous
@@ -69,6 +75,10 @@ export const schemaTypes: SchemaTypeDefinition[] = [
 	pricing,
 	reputation,
 	testimonial,
+	ageGroup,
+	catType,
+	hairColor,
+	hairLength,
 
 	// objects
 	cta,

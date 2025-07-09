@@ -24,6 +24,15 @@ export const structure = structureTool({
 				S.documentTypeListItem('blog.category').title('Blog categories'),
 				S.divider(),
 
+				S.documentTypeListItem('cat').title('Cats'),
+				group(S, 'Cat Settings', [
+					S.documentTypeListItem('age-group').title('Age Groups'),
+					S.documentTypeListItem('cat-type').title('Breeds'),
+					S.documentTypeListItem('hair-color').title('Hair Colors'),
+					S.documentTypeListItem('hair-length').title('Hair Lengths'),
+				]),
+				S.divider(),
+
 				S.documentTypeListItem('navigation'),
 				S.documentTypeListItem('redirect').title('Redirects'),
 
