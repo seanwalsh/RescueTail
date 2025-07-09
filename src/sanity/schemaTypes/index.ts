@@ -7,6 +7,7 @@ import globalModule from './documents/global-module'
 import blogPost from './documents/blog.post'
 import blogCategory from './documents/blog.category'
 import cat from './documents/cat'
+import bonding from './documents/bonding'
 import navigation from './documents/navigation'
 import redirect from './documents/redirect'
 
@@ -56,7 +57,7 @@ import stepList from './modules/step-list'
 import tabbedContent from './modules/tabbed-content'
 import testimonialFeatured from './modules/testimonial.featured'
 import testimonialList from './modules/testimonial-list'
-import catModule from './modules/cat'
+import catModule from './modules/cat-module'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
 	// documents
@@ -66,6 +67,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
 	blogPost,
 	blogCategory,
 	cat,
+	bonding,
 	navigation,
 
 	// miscellaneous

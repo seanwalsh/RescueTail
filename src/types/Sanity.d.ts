@@ -87,13 +87,22 @@ declare global {
 			}
 			type?: CatType
 			otherCats?: 'bonded' | 'cannot_be_only' | 'must_be_only' | 'best_as_only'
-			bondedCats?: Cat[]
 			goodWithDogs?: 'yes' | 'no'
 			fee?: string
 			link?: string
 			description?: any
 			gallery?: Image[]
 			metadata?: Metadata
+			language?: string
+			bondings?: Bonding[]
+		}
+
+		interface Bonding extends SanityDocument {
+			readonly _type: 'bonding'
+			title: string
+			description?: any
+			cats: Cat[]
+			isActive?: boolean
 			language?: string
 		}
 

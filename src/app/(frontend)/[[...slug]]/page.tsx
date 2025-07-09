@@ -64,40 +64,62 @@ export async function generateStaticParams() {
 async function getPage(params: Params): Promise<Sanity.Page | Sanity.Cat | undefined> {
 	const { slug, lang } = processSlug(params)
 
-	// Check if this is a cat route (starts with 'cat/')
-	if (slug.startsWith('cat/')) {
-		const catSlug = slug.replace('cat/', '')
-		const cat = await fetchSanityLive<Sanity.Cat>({
-			query: groq`*[
-				_type == 'cat' &&
-				metadata.slug.current == $catSlug
-				${lang ? `&& language == '${lang}'` : ''}
-			][0]{
-				...,
-				ageGroup->{ title },
-				type->{ title },
-				hair {
-					primaryColor->{ title },
-					secondaryColor->{ title },
-					length->{ title }
-				},
-				bondedCats[]->{
+			// Check if this is a cat route (starts with 'cat/')
+		if (slug.startsWith('cat/')) {
+			const catSlug = slug.replace('cat/', '')
+			
+			// First, get the cat to get its ID
+			const cat = await fetchSanityLive<Sanity.Cat>({
+				query: groq`*[
+					_type == 'cat' &&
+					metadata.slug.current == $catSlug
+					${lang ? `&& language == '${lang}'` : ''}
+				][0]{
 					_id,
-					name,
-					metadata { slug }
-				},
-				metadata {
 					...,
-					'ogimage': image.asset->url + '?w=1200'
-				},
-			}`,
-			params: { catSlug },
-		})
+					ageGroup->{ title },
+					type->{ title },
+					hair {
+						primaryColor->{ title },
+						secondaryColor->{ title },
+						length->{ title }
+					},
+					metadata {
+						...,
+						'ogimage': image.asset->url + '?w=1200'
+					},
+				}`,
+				params: { catSlug },
+			})
 
-		if (cat) {
-			return cat
+			if (cat) {
+				// Now get bondings that include this cat
+				const bondings = await fetchSanityLive<Sanity.Bonding[]>({
+					query: groq`*[
+						_type == 'bonding' &&
+						$catId in cats[]._ref &&
+						isActive == true
+					]{
+						_id,
+						title,
+						description,
+						cats[]->{
+							_id,
+							name,
+							gallery[],
+							metadata { slug }
+						}
+					}`,
+					params: { catId: cat._id },
+				})
+
+				// Combine the data
+				return {
+					...cat,
+					bondings: bondings || [],
+				}
+			}
 		}
-	}
 
 	const page = await fetchSanityLive<Sanity.Page>({
 		query: groq`*[

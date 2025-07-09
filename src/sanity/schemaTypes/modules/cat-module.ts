@@ -2,8 +2,8 @@ import { defineField, defineType } from 'sanity'
 import { VscHeart } from 'react-icons/vsc'
 
 export default defineType({
-	name: 'cat',
-	title: 'Cat',
+	name: 'cat-module',
+	title: 'Cat Module',
 	icon: VscHeart,
 	type: 'object',
 	groups: [
@@ -74,7 +74,7 @@ export default defineType({
 		},
 		prepare: ({ title, catName, intro }) => ({
 			title: title || catName || 'Cat Module',
-			subtitle: 'Cat',
+			subtitle: 'Cat Module',
 		}),
 	},
 }) 

@@ -118,15 +118,7 @@ export default defineType({
 			},
 			group: 'details',
 		}),
-		defineField({
-			name: 'bondedCats',
-			title: 'Bonded Cats',
-			type: 'array',
-			of: [{ type: 'reference', to: [{ type: 'cat' }] }],
-			description: 'Select other cats this cat is bonded with (only shown when "Other Cats" is set to "Bonded")',
-			group: 'details',
-			hidden: ({ document }) => document?.otherCats !== 'bonded',
-		}),
+
 		defineField({
 			name: 'goodWithDogs',
 			title: 'Good with Dogs',

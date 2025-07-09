@@ -25,6 +25,7 @@ export const structure = structureTool({
 				S.divider(),
 
 				S.documentTypeListItem('cat').title('Cats'),
+				S.documentTypeListItem('bonding').title('Bondings'),
 				group(S, 'Cat Settings', [
 					S.documentTypeListItem('age-group').title('Age Groups'),
 					S.documentTypeListItem('cat-type').title('Breeds'),
