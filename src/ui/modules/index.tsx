@@ -20,6 +20,7 @@ import TabbedContent from './TabbedContent'
 import TestimonialList from './TestimonialList'
 import TestimonialFeatured from './TestimonialFeatured'
 import CatModule from './CatModule'
+import CatList from './CatList'
 
 import dynamic from 'next/dynamic'
 import { createDataAttribute } from 'next-sanity'
@@ -32,6 +33,7 @@ const MODULE_MAP = {
 	breadcrumbs: Breadcrumbs,
 	callout: Callout,
 	'card-list': CardList,
+	'cat-list': CatList,
 	'creative-module': dynamic(() => import('./CreativeModule')),
 	'custom-html': CustomHTML,
 	'flag-list': FlagList,
@@ -50,7 +52,7 @@ const MODULE_MAP = {
 	'testimonial-list': TestimonialList,
 	'testimonial.featured': TestimonialFeatured,
 	cat: CatModule,
-} as const
+}
 
 export default function Modules({
 	modules,
@@ -77,7 +79,7 @@ export default function Modules({
 			{modules?.map((module) => {
 				if (!module) return null
 
-				const Component = MODULE_MAP[module._type as keyof typeof MODULE_MAP]
+				const Component = MODULE_MAP[module._type as keyof typeof MODULE_MAP] as any
 
 				if (!Component) return null
 
