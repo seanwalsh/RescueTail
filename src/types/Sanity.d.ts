@@ -195,6 +195,16 @@ declare global {
 			}
 		}
 
+		interface CatModule extends Module<'cat'> {
+			title?: string
+			intro?: any
+			cat?: Cat
+			showGallery?: boolean
+			showDetails?: boolean
+			showDescription?: boolean
+			ctas?: CTA[]
+		}
+
 		interface Icon {
 			readonly _type: 'icon'
 			image?: Image

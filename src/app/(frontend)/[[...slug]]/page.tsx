@@ -12,28 +12,21 @@ import {
 import { languages } from '@/lib/i18n'
 import errors from '@/lib/errors'
 
-// Simple CatPage component
-function CatPage({ cat }: { cat: Sanity.Cat }) {
-	return (
-		<div className="container mx-auto px-4 py-8">
-			<h1 className="text-3xl font-bold mb-4">{cat.name}</h1>
-			{!cat.isAvailable && (
-				<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-					This cat is not currently available for adoption.
-				</div>
-			)}
-			{/* Add more cat details here */}
-		</div>
-	)
-}
-
 export default async function Page({ params }: Props) {
 	const data = await getPage(await params)
 	if (!data) notFound()
 	
-	// Handle cat pages differently
+	// Handle cat pages by creating a cat module
 	if (data._type === 'cat') {
-		return <CatPage cat={data} />
+		const catModule: Sanity.CatModule = {
+			_type: 'cat',
+			_key: 'cat-detail',
+			cat: data,
+			showGallery: true,
+			showDetails: true,
+			showDescription: true,
+		}
+		return <Modules modules={[catModule]} />
 	}
 	
 	return <Modules modules={data.modules} page={data} />
