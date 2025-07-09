@@ -7,21 +7,9 @@ export const structure = structureTool({
 		S.list()
 			.title('Content')
 			.items([
-				singleton(S, 'site', 'Site settings').icon(VscServerProcess),
-				S.divider(),
 
 				S.documentTypeListItem('page').title('All pages').icon(VscFiles),
-				// customize page directories
-				group(S, 'Directories', [
-					directory(S, 'docs', { maxLevel: 1 }).title('Docs'),
-					directory(S, 'docs/modules').title('Docs › Modules'),
-				]),
 
-				S.documentTypeListItem('global-module').title('Global modules'),
-				S.divider(),
-
-				S.documentTypeListItem('blog.post').title('Blog posts'),
-				S.documentTypeListItem('blog.category').title('Blog categories'),
 				S.divider(),
 
 				S.documentTypeListItem('cat').title('Cats'),
@@ -34,14 +22,27 @@ export const structure = structureTool({
 				]),
 				S.divider(),
 
-				S.documentTypeListItem('navigation'),
-				S.documentTypeListItem('redirect').title('Redirects'),
+				S.documentTypeListItem('blog.post').title('Blog posts'),
+				S.documentTypeListItem('blog.category').title('Blog categories'),
+				S.divider(),
 
-				group(S, 'Miscellaneous', [
+				// customize page directories
+				group(S, 'Directories', [
+					directory(S, 'docs', { maxLevel: 1 }).title('Docs'),
+					directory(S, 'docs/modules').title('Docs › Modules'),
+				]),
+
+				S.documentTypeListItem('global-module').title('Global modules'),
+				S.divider(),
+
+				group(S, 'Settings', [
+					singleton(S, 'site', 'Site settings').icon(VscServerProcess),
 					S.documentTypeListItem('announcement').title('Announcements'),
 					S.documentTypeListItem('logo').title('Logos'),
+					S.documentTypeListItem('navigation'),
 					S.documentTypeListItem('person').title('People'),
 					S.documentTypeListItem('pricing').title('Pricing tiers'),
+					S.documentTypeListItem('redirect').title('Redirects'),
 					S.documentTypeListItem('reputation'),
 					S.documentTypeListItem('testimonial').title('Testimonials'),
 				]),
