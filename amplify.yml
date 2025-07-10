@@ -9,8 +9,16 @@ frontend:
         - pnpm install
     build:
       commands:
+        - echo "=== Environment Variables ==="
         - env | grep -e SANITY_API_READ_TOKEN -e NEXT_PUBLIC_
+        - echo "=== Node Version ==="
+        - node --version
+        - echo "=== PNPM Version ==="
+        - pnpm --version
+        - echo "=== Starting Build ==="
         - pnpm run build
+        - echo "=== Build Complete ==="
+        - ls -la .next/
   artifacts:
     baseDirectory: .next
     files:
