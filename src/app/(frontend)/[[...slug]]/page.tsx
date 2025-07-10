@@ -15,7 +15,7 @@ import errors from '@/lib/errors'
 export default async function Page({ params }: Props) {
 	const data = await getPage(await params)
 	if (!data) notFound()
-	
+
 	// Handle cat pages by creating a cat module
 	if (data._type === 'cat') {
 		const catModule: Sanity.CatModule = {
@@ -28,7 +28,7 @@ export default async function Page({ params }: Props) {
 		}
 		return <Modules modules={[catModule]} />
 	}
-	
+
 	return <Modules modules={data.modules} page={data} />
 }
 
@@ -61,16 +61,18 @@ export async function generateStaticParams() {
 	return [...slugs, ...catSlugs].map(({ slug }) => ({ slug: slug.split('/') }))
 }
 
-async function getPage(params: Params): Promise<Sanity.Page | Sanity.Cat | undefined> {
+async function getPage(
+	params: Params,
+): Promise<Sanity.Page | Sanity.Cat | undefined> {
 	const { slug, lang } = processSlug(params)
 
-			// Check if this is a cat route (starts with 'cat/')
-		if (slug.startsWith('cat/')) {
-			const catSlug = slug.replace('cat/', '')
-			
-			// First, get the cat to get its ID
-			const cat = await fetchSanityLive<Sanity.Cat>({
-				query: groq`*[
+	// Check if this is a cat route (starts with 'cat/')
+	if (slug.startsWith('cat/')) {
+		const catSlug = slug.replace('cat/', '')
+
+		// First, get the cat to get its ID
+		const cat = await fetchSanityLive<Sanity.Cat>({
+			query: groq`*[
 					_type == 'cat' &&
 					metadata.slug.current == $catSlug
 					${lang ? `&& language == '${lang}'` : ''}
@@ -89,13 +91,13 @@ async function getPage(params: Params): Promise<Sanity.Page | Sanity.Cat | undef
 						'ogimage': image.asset->url + '?w=1200'
 					},
 				}`,
-				params: { catSlug },
-			})
+			params: { catSlug },
+		})
 
-			if (cat) {
-				// Now get bondings that include this cat
-				const bondings = await fetchSanityLive<Sanity.Bonding[]>({
-					query: groq`*[
+		if (cat) {
+			// Now get bondings that include this cat
+			const bondings = await fetchSanityLive<Sanity.Bonding[]>({
+				query: groq`*[
 						_type == 'bonding' &&
 						$catId in cats[]._ref &&
 						isActive == true
@@ -110,16 +112,16 @@ async function getPage(params: Params): Promise<Sanity.Page | Sanity.Cat | undef
 							metadata { slug }
 						}
 					}`,
-					params: { catId: cat._id },
-				})
+				params: { catId: cat._id },
+			})
 
-				// Combine the data
-				return {
-					...cat,
-					bondings: bondings || [],
-				}
+			// Combine the data
+			return {
+				...cat,
+				bondings: bondings || [],
 			}
 		}
+	}
 
 	const page = await fetchSanityLive<Sanity.Page>({
 		query: groq`*[

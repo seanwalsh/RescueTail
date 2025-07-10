@@ -1,5 +1,5 @@
 import resolveUrl from './resolveUrl'
-import { BASE_URL, BLOG_DIR, vercelPreview } from './env'
+import { BASE_URL, BLOG_DIR } from './env'
 import type { Metadata } from 'next'
 import { DEFAULT_LANG } from './i18n'
 
@@ -25,15 +25,12 @@ export default async function processMetadata(
 				description: `Meet ${page.name}, available for adoption.`,
 				images: `${BASE_URL}/api/og?title=${encodeURIComponent(page.name)}`,
 			},
-			robots: {
-				index: vercelPreview ? false : undefined,
-			},
 			alternates: {
 				canonical: url,
 			},
 		}
 	}
-	
+
 	const url = resolveUrl(page)
 	const { title, description, ogimage, noIndex } = page.metadata!
 
@@ -48,9 +45,6 @@ export default async function processMetadata(
 			description,
 			images:
 				ogimage || `${BASE_URL}/api/og?title=${encodeURIComponent(title)}`,
-		},
-		robots: {
-			index: noIndex || vercelPreview ? false : undefined,
 		},
 		alternates: {
 			canonical: url,

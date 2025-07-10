@@ -10,8 +10,6 @@ An opinionated, fully customizable Next.js (App Router) and Sanity starter templ
 npm create sanity@latest -- --template nuotsu/sanitypress
 ```
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnuotsu%2Fsanitypress&env=NEXT_PUBLIC_BASE_URL,NEXT_PUBLIC_SANITY_PROJECT_ID,NEXT_PUBLIC_SANITY_DATASET,SANITY_API_READ_TOKEN&envDescription=Values%20needed%20to%20connect%20a%20Sanity%20CMS&envLink=https%3A%2F%2Fsanitypress.dev%2Fdocs%2Fgetting-started&demo-title=SanityPress&demo-description=Official%20website%20and%20blog%20for%20SanityPress%2C%20built%20with%20SanityPress&demo-url=https%3A%2F%2Fsanitypress.dev&demo-image=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Felyfelq1%2Fproduction%2F7fb61a2b110f509582f0f43cb1e397f8fa9e5c07-2814x1798.png%3Fw%3D1600)
-
 ![](https://cdn.sanity.io/images/elyfelq1/production/17ec6fdce5bde2beebfb8c9b15078922e5fac6f3-3616x1808.png?w=2000)
 
 ## Key Features
@@ -77,13 +75,11 @@ Create a GitHub repository from this project. [Learn more](https://docs.github.c
 
 #### 2. Set up deployments
 
-Create a new [Vercel](https://vercel.com) / [Netlify](https://www.netlify.com) / etc project, connecting it to your Github repository
-
 Set up your deployment settings, such as the **Root Directory** to your Next.js app.
 
 #### 3. Set environment variables
 
-Configure your Environment Variables in Vercel / Netlify / etc.
+Configure your Environment Variables
 
 ```ini
 NEXT_PUBLIC_BASE_URL="" # https://sanitypress.dev
@@ -94,11 +90,6 @@ SANITY_API_READ_TOKEN="" # "Viewer" token from https://sanity.io/manage
 
 NEXT_PUBLIC_GITHUB_TOKEN="" # recommended to add to display GitHub stars & forks
 ```
-
-#### 4. Add a deployment widget to enable deployments directly from the Studio.
-
-- Vercel: [`vercel-dashboard-widget`](https://www.sanity.io/plugins/vercel-dashboard-widget)
-- Netlify: [`sanity-plugin-dashboard-widget-netlify`](https://www.sanity.io/plugins/sanity-plugin-dashboard-widget-netlify)
 
 ### 5. Customize
 
