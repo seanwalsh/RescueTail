@@ -56,6 +56,7 @@ export default {
 
 	env: {
 		SC_DISABLE_SPEEDY: 'false',
+		SANITY_API_READ_TOKEN: process.env.SANITY_API_READ_TOKEN,
 	},
 
 	// logging: {
