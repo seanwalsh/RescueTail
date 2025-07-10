@@ -14,10 +14,11 @@ import {
 import { visionTool } from '@sanity/vision'
 import { codeInput } from '@sanity/code-input'
 import { media } from 'sanity-plugin-media'
-import { DEFAULT_LANG, supportedLanguages } from '@/lib/i18n'
+import { supportedLanguages } from '@/lib/i18n'
 import { documentInternationalization } from '@sanity/document-internationalization'
 import { schemaTypes } from './src/sanity/schemaTypes'
 import resolveUrl from '@/lib/resolveUrl'
+import { webhookTriggerPlugin } from './src/sanity/plugins/webhook-trigger'
 
 const singletonTypes = ['site']
 
@@ -29,6 +30,17 @@ export default defineConfig({
 	basePath: '/admin',
 
 	plugins: [
+		webhookTriggerPlugin({
+			webhookUrl:
+				process.env.AMPLIFY_WEBHOOK_URL ||
+				'https://webhooks.amplify.us-east-1.amazonaws.com/prod/webhooks',
+			title: 'Deploy',
+			text: 'Deploy to AWS Amplify',
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}),
 		structure,
 		presentation,
 		dashboardTool({

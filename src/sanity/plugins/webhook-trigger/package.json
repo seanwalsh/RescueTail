@@ -1,0 +1,17 @@
+{
+	"name": "sanity-plugin-webhook-trigger",
+	"version": "1.0.0",
+	"description": "Custom Sanity plugin to trigger webhooks via HTTP requests",
+	"main": "index.ts",
+	"types": "index.ts",
+	"keywords": [
+		"sanity",
+		"plugin",
+		"webhook"
+	],
+	"author": "Your Name",
+	"license": "MIT",
+	"peerDependencies": {
+		"sanity": "^3.0.0"
+	}
+}
