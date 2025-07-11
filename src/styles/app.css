@@ -4,9 +4,23 @@
 @theme {
 	--color-canvas: #fff;
 	--color-ink: #000;
-	--color-accent: #000;
+	--color-accent: #002F49;
+
+	--default-font-family: 'familyABeeZee';
 
 	--max-height-fold: calc(100svh - var(--header-height));
+
+	--color-brand-50: #EFFBFC;
+	--color-brand-100: #DEF4F7;
+	--color-brand-200: #B5E4EC;
+	--color-brand-300: #82D1DE;
+	--color-brand-400: #47B3C9;
+	--color-brand-500: #2C96AE;
+	--color-brand-600: #277A93;
+	--color-brand-700: #266478;
+	--color-brand-800: #265364;
+	--color-brand-900: #244655;
+	--color-brand-950: #132D39;
 }
 
 @custom-variant hover (&:hover);
@@ -44,13 +58,12 @@
 	}
 
 	@keyframes target {
+
 		0%,
 		50% {
-			background-color: color-mix(
-				in oklab,
-				var(--color-amber-400) 50%,
-				transparent
-			);
+			background-color: color-mix(in oklab,
+					var(--color-amber-400) 50%,
+					transparent);
 		}
 	}
 
@@ -103,21 +116,24 @@
 @utility anim-fade {
 	--x: 0;
 	--y: 0;
-	animation: anim-fade-to var(--default-transition-duration) ease-in-out
-		forwards;
+	animation: anim-fade-to var(--default-transition-duration) ease-in-out forwards;
 }
+
 @utility anim-fade-to-l {
 	@apply anim-fade;
 	--x: 1rem;
 }
+
 @utility anim-fade-to-r {
 	@apply anim-fade;
 	--x: -1rem;
 }
+
 @utility anim-fade-to-t {
 	@apply anim-fade;
 	--y: 1rem;
 }
+
 @utility anim-fade-to-b {
 	@apply anim-fade;
 	--y: -1rem;
@@ -139,18 +155,23 @@
 @utility h1 {
 	@apply h-base text-4xl;
 }
+
 @utility h2 {
 	@apply h-base text-3xl;
 }
+
 @utility h3 {
 	@apply h-base text-2xl;
 }
+
 @utility h4 {
 	@apply h-base text-xl;
 }
+
 @utility h5 {
 	@apply h-base text-lg;
 }
+
 @utility h6 {
 	@apply h-base;
 }
@@ -229,23 +250,19 @@
 
 @utility overflow-fade {
 	--offset: 4rem;
-	mask: linear-gradient(
-		to right,
-		transparent,
-		black var(--offset),
-		black calc(100% - var(--offset)),
-		transparent
-	);
+	mask: linear-gradient(to right,
+			transparent,
+			black var(--offset),
+			black calc(100% - var(--offset)),
+			transparent);
 }
 
 @utility overflow-fade-r {
 	--offset: 4rem;
-	mask: linear-gradient(
-		to right,
-		black 50%,
-		black calc(100% - var(--offset)),
-		transparent
-	);
+	mask: linear-gradient(to right,
+			black 50%,
+			black calc(100% - var(--offset)),
+			transparent);
 }
 
 /* layout */
@@ -260,7 +277,7 @@
 	@apply space-y-2 leading-relaxed;
 
 	& :is(h1, h2, h3, h4, h5, h6) strong {
-		@apply text-gradient;
+		@apply text-ink;
 	}
 
 	& h1 {
@@ -291,7 +308,7 @@
 		list-style: revert;
 		padding-left: 1.5em;
 
-		& > li > ol {
+		&>li>ol {
 			list-style: lower-alpha;
 		}
 	}
@@ -300,7 +317,7 @@
 		@apply link;
 	}
 
-	& :not(pre) > code {
+	& :not(pre)>code {
 		@apply bg-ink/10 rounded px-1;
 	}
 
@@ -347,9 +364,11 @@
 @utility skeleton {
 	@apply bg-ink/3 h-[1lh];
 }
+
 @utility skeleton-2 {
 	@apply bg-ink/3 h-[2lh];
 }
+
 @utility skeleton-3 {
 	@apply bg-ink/3 h-[3lh];
 }
@@ -385,7 +404,7 @@
 	overflow-x: auto;
 	scroll-snap-type: x mandatory;
 
-	& > * {
+	&>* {
 		flex: 0 0 min(var(--size, 300px), 80vw);
 		scroll-snap-align: center;
 	}
