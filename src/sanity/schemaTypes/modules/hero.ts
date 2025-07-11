@@ -52,6 +52,15 @@ export default defineType({
 			group: 'asset',
 		}),
 		defineField({
+			name: 'overlayOpacity',
+			title: 'Overlay opacity',
+			description: 'Black overlay opacity (0 = none, 1 = solid black)',
+			type: 'number',
+			group: 'options',
+			validation: (Rule) => Rule.min(0).max(1),
+			initialValue: 0.6,
+		}),
+		defineField({
 			...alignItems,
 			fieldset: 'alignment',
 			group: 'options',

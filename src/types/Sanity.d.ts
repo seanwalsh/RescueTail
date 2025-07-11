@@ -204,24 +204,34 @@ declare global {
 			}
 		}
 
-			interface CatModule extends Module<'cat'> {
-		title?: string
-		intro?: any
-		cat?: Cat
-		showGallery?: boolean
-		showDetails?: boolean
-		showDescription?: boolean
-		ctas?: CTA[]
-	}
+		interface CatModule extends Module<'cat'> {
+			title?: string
+			intro?: any
+			cat?: Cat
+			showGallery?: boolean
+			showDetails?: boolean
+			showDescription?: boolean
+			ctas?: CTA[]
+		}
 
-	interface CatList extends Module<'cat-list'> {
-		title?: string
-		intro?: any
-		itemsPerPage?: number
-		showFilters?: boolean
-		showPagination?: boolean
-		ctas?: CTA[]
-	}
+		interface CatList extends Module<'cat-list'> {
+			title?: string
+			intro?: any
+			itemsPerPage?: number
+			showFilters?: boolean
+			showPagination?: boolean
+			ctas?: CTA[]
+		}
+
+		interface Hero extends Module<'hero'> {
+			pretitle?: string
+			content?: any
+			ctas?: CTA[]
+			assets?: Img[]
+			textAlign?: React.CSSProperties['textAlign']
+			alignItems?: React.CSSProperties['alignItems']
+			overlayOpacity?: number
+		}
 
 		interface Icon {
 			readonly _type: 'icon'

@@ -14,6 +14,7 @@ export default function Hero({
 	assets,
 	textAlign = 'center',
 	alignItems,
+	overlayOpacity = 0.6,
 	...props
 }: Partial<{
 	pretitle: string
@@ -22,6 +23,7 @@ export default function Hero({
 	assets: Sanity.Img[]
 	textAlign: React.CSSProperties['textAlign']
 	alignItems: React.CSSProperties['alignItems']
+	overlayOpacity: number
 }> &
 	Sanity.Module) {
 	const hasImage = !!assets?.[0]
@@ -30,22 +32,31 @@ export default function Hero({
 	return (
 		<section
 			className={cn(
+				'relative', // Ensure overlay and image are scoped to section
 				hasImage &&
 					'bg-ink text-canvas grid overflow-hidden *:col-span-full *:row-span-full',
 			)}
 			{...moduleProps(props)}
 		>
 			{hasImage && (
-				<ResponsiveImg
-					img={asset}
-					className="max-h-fold size-full object-cover"
-					width={2400}
-					draggable={false}
-				/>
+				<>
+					<ResponsiveImg
+						img={asset}
+						className="max-h-fold z-0 size-full object-cover" // Ensure image is at z-0
+						width={2400}
+						draggable={false}
+					/>
+					{/* Overlay for accessibility */}
+					<div
+						aria-hidden="true"
+						className="absolute inset-0 z-[1] bg-black"
+						style={{ opacity: overlayOpacity }}
+					/>
+				</>
 			)}
 
 			{content && (
-				<div className="section flex w-full flex-col text-balance">
+				<div className="section relative z-10 flex w-full flex-col text-balance">
 					<div
 						className={cn(
 							'richtext headings:text-balance relative isolate max-w-xl',
