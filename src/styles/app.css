@@ -6,7 +6,8 @@
 	--color-ink: #000;
 	--color-accent: #002F49;
 
-	--default-font-family: 'familyABeeZee';
+	--default-font-family: var(--font-roboto, 'Roboto', sans-serif);
+	--headline-font-family: var(--font-abeezee, 'ABeeZee', sans-serif);
 
 	--max-height-fold: calc(100svh - var(--header-height));
 
@@ -71,6 +72,24 @@
 		accent-color: var(--color-accent);
 		caret-color: var(--color-accent);
 		scroll-behavior: smooth;
+	}
+
+	:root {
+		--default-font-family: var(--font-roboto, 'Roboto', sans-serif);
+		--headline-font-family: var(--font-abeezee, 'ABeeZee', sans-serif);
+	}
+
+	body {
+		font-family: var(--default-font-family);
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--headline-font-family);
 	}
 
 	body:has(dialog[open]) {
