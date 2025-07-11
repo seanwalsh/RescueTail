@@ -6,10 +6,7 @@ export default defineType({
 	title: 'Cat List',
 	icon: VscHeart,
 	type: 'object',
-	groups: [
-		{ name: 'content', default: true },
-		{ name: 'options' },
-	],
+	groups: [{ name: 'content', default: true }, { name: 'options' }],
 	fields: [
 		defineField({
 			name: 'options',
@@ -27,7 +24,13 @@ export default defineType({
 			name: 'intro',
 			title: 'Introduction',
 			type: 'array',
-			of: [{ type: 'block' }],
+			of: [
+				{
+					type: 'block',
+					styles: [{ title: 'Normal', value: 'normal' }],
+					lists: [],
+				},
+			],
 			group: 'content',
 		}),
 		defineField({
@@ -70,4 +73,4 @@ export default defineType({
 			subtitle: 'Cat List Module',
 		}),
 	},
-}) 
+})

@@ -65,16 +65,27 @@ export default function CatList({
 		return cats.filter((cat: Sanity.Cat) => {
 			if (filters.gender && cat.gender !== filters.gender) return false
 			if (filters.type && cat.type?.title !== filters.type) return false
-			if (filters.ageGroup && cat.ageGroup?.title !== filters.ageGroup) return false
+			if (filters.ageGroup && cat.ageGroup?.title !== filters.ageGroup)
+				return false
 			return true
 		})
 	}, [cats, filters])
 
 	// Get unique filter options
 	const filterOptions = useMemo(() => {
-		const genders = [...new Set(cats.map((cat: Sanity.Cat) => cat.gender).filter(Boolean))] as string[]
-		const types = [...new Set(cats.map((cat: Sanity.Cat) => cat.type?.title).filter(Boolean))] as string[]
-		const ageGroups = [...new Set(cats.map((cat: Sanity.Cat) => cat.ageGroup?.title).filter(Boolean))] as string[]
+		const genders = [
+			...new Set(cats.map((cat: Sanity.Cat) => cat.gender).filter(Boolean)),
+		] as string[]
+		const types = [
+			...new Set(
+				cats.map((cat: Sanity.Cat) => cat.type?.title).filter(Boolean),
+			),
+		] as string[]
+		const ageGroups = [
+			...new Set(
+				cats.map((cat: Sanity.Cat) => cat.ageGroup?.title).filter(Boolean),
+			),
+		] as string[]
 
 		return { genders, types, ageGroups }
 	}, [cats])
@@ -91,21 +102,33 @@ export default function CatList({
 	}, [filters])
 
 	return (
-		<section className="py-16 bg-gray-50">
+		<section className="bg-gray-50 py-16">
 			<div className="container mx-auto px-4">
-				<div className="max-w-7xl mx-auto">
+				<div className="mx-auto max-w-7xl">
 					{/* Header */}
-					<div className="text-center mb-12">
+					<div className="mb-12 text-center">
 						{title && (
-							<h1 className="text-4xl font-bold text-gray-900 mb-4">{title}</h1>
+							<h1 className="mb-4 text-4xl font-bold text-gray-900">{title}</h1>
 						)}
 						{intro && (
-							<div className="prose prose-lg mx-auto text-gray-600 mb-6">
-								<PortableText value={intro} />
+							<div className="mx-auto mb-6">
+								<PortableText
+									value={intro}
+									components={{
+										block: {
+											// Only render paragraphs, no headlines
+											normal: ({ children }) => (
+												<p className="prose-lg mx-auto mb-6 text-balance text-gray-600">
+													{children}
+												</p>
+											),
+										},
+									}}
+								/>
 							</div>
 						)}
 						{ctas && ctas.length > 0 && (
-							<div className="mb-6">
+							<div className="mb-6 flex justify-center">
 								<CTAList ctas={ctas} />
 							</div>
 						)}
@@ -125,13 +148,16 @@ export default function CatList({
 
 					{/* Loading State */}
 					{isLoading && (
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+						<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 							{Array.from({ length: itemsPerPage }).map((_, i) => (
-								<div key={i} className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+								<div
+									key={i}
+									className="animate-pulse overflow-hidden rounded-lg bg-white shadow-md"
+								>
 									<div className="aspect-square bg-gray-200" />
-									<div className="p-4 space-y-2">
-										<div className="h-4 bg-gray-200 rounded w-3/4" />
-										<div className="h-3 bg-gray-200 rounded w-1/2" />
+									<div className="space-y-2 p-4">
+										<div className="h-4 w-3/4 rounded bg-gray-200" />
+										<div className="h-3 w-1/2 rounded bg-gray-200" />
 									</div>
 								</div>
 							))}
@@ -142,14 +168,14 @@ export default function CatList({
 					{!isLoading && (
 						<>
 							{paginatedCats.length > 0 ? (
-								<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+								<div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 									{paginatedCats.map((cat: Sanity.Cat) => (
 										<CatCard key={cat._id} cat={cat} />
 									))}
 								</div>
 							) : (
-								<div className="text-center py-12">
-									<p className="text-gray-500 text-lg">
+								<div className="py-12 text-center">
+									<p className="text-lg text-gray-500">
 										No cats found matching your criteria.
 									</p>
 								</div>
@@ -169,4 +195,4 @@ export default function CatList({
 			</div>
 		</section>
 	)
-} 
+}
