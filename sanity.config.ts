@@ -30,6 +30,7 @@ export default defineConfig({
 	basePath: '/admin',
 
 	plugins: [
+		structure,
 		webhookTriggerPlugin({
 			webhookUrl:
 				process.env.AMPLIFY_WEBHOOK_URL ||
@@ -41,7 +42,6 @@ export default defineConfig({
 				'Content-Type': 'application/json',
 			},
 		}),
-		structure,
 		presentation,
 		dashboardTool({
 			name: 'deployment',
