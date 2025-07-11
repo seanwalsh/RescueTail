@@ -1,10 +1,7 @@
 'use client'
 
-import getLang from '@/lib/getLang'
-import type { ComponentProps } from 'react'
+import type { ReactNode } from 'react'
 
-export default function Root(props: ComponentProps<'html'>) {
-	const lang = getLang()
-
-	return <html lang={lang} {...props} />
+export default function Root({ children }: { children: ReactNode }) {
+	return <>{children}</>
 }

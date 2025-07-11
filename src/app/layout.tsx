@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" className={`${abeezee.variable} ${roboto.variable}`}>
-			<body>{children}</body>
+			<body className="bg-canvas text-ink">{children}</body>
 		</html>
 	)
 }
