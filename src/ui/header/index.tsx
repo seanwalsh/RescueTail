@@ -33,7 +33,7 @@ export default async function Header() {
 								alt={logo?.name || title}
 							/>
 						) : (
-							<span className="text-gradient">{title}</span>
+							<span className="text-ink">{title}</span>
 						)}
 					</Link>
 				</div>
