@@ -11,6 +11,7 @@ A custom Sanity plugin that adds a manual deploy button to the Sanity Studio int
 - Custom headers support
 - Comprehensive error handling and logging
 - Success/error feedback in the UI
+- **AWS Amplify integration with CORS handling**
 
 ## Configuration
 
@@ -60,7 +61,57 @@ For production deployment, you need to configure the environment variable in the
    - **Value**: Your webhook URL (same as local)
 5. Save and redeploy your app
 
-**Note**: The webhook URL in the environment variable should be for a _different_ Amplify app (the one you want to trigger builds for), not the same app that's running this code.
+**Important**: The webhook URL should be for a **different** Amplify app (the one you want to trigger builds for), not the same app that's running this code. If you're trying to trigger builds on the same app, consider using AWS Amplify's built-in webhook feature instead.
+
+## AWS Amplify Deployment Issues
+
+### Problem: Webhook not working when deployed on AWS Amplify
+
+**Symptoms:**
+
+- Webhook works locally but fails when deployed
+- Error: "AMPLIFY_WEBHOOK_URL environment variable is not configured"
+- CORS errors in browser console
+
+**Solutions:**
+
+#### Solution 1: Use Different Amplify App (Recommended)
+
+1. Create a separate Amplify app for your frontend
+2. Keep your Sanity Studio in the current app
+3. Configure the webhook URL to point to the frontend app
+4. This avoids circular dependencies
+
+#### Solution 2: Use AWS Amplify's Built-in Webhook
+
+1. Go to your Amplify app settings
+2. Navigate to **Build settings** > **Build notifications**
+3. Add a webhook notification
+4. Use that webhook URL instead of the custom one
+
+#### Solution 3: Environment Variable Configuration
+
+1. Ensure `AMPLIFY_WEBHOOK_URL` is set in your Amplify app's environment variables
+2. Redeploy your app after adding the environment variable
+3. Check the build logs to verify the environment variable is available
+
+### Debugging Steps
+
+1. **Check Environment Variables:**
+
+   ```bash
+   # In your amplify.yml, add this to see what's available:
+   - echo "AMPLIFY_WEBHOOK_URL: $AMPLIFY_WEBHOOK_URL"
+   ```
+
+2. **Check Browser Console:**
+   - Open browser dev tools
+   - Look for CORS errors or network failures
+   - Check the "Debug Info" button in the Sanity Studio
+
+3. **Check Server Logs:**
+   - Look at your Amplify build logs
+   - Check for any error messages in the API route
 
 ## Webhook Payload
 

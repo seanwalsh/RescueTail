@@ -11,35 +11,54 @@ export async function webhookTrigger(
 ): Promise<void> {
 	const { webhookUrl, secret, method = 'POST', headers = {}, payload } = options
 
-	// For AWS Amplify webhooks, we'll use our local API route to avoid CORS
-	const apiUrl = '/api/deploy'
+	// Check if we're in a browser environment (Sanity Studio)
+	const isBrowser = typeof window !== 'undefined'
+
+	// For AWS Amplify webhooks in the browser, we need to use our API proxy
+	// to avoid CORS issues
+	const shouldUseProxy =
+		isBrowser && webhookUrl.includes('amplify.amazonaws.com')
 
 	const requestOptions: RequestInit = {
-		method: 'POST',
+		method: shouldUseProxy ? 'POST' : method,
 		headers: {
 			'Content-Type': 'application/json',
+			...headers,
 		},
 	}
 
+	// Add payload if provided
+	if (payload && !shouldUseProxy) {
+		requestOptions.body = JSON.stringify(payload)
+	}
+
 	try {
-		console.log('Sending webhook request via API proxy:', {
-			originalUrl: webhookUrl,
-			apiUrl,
-			method,
-			headers,
+		console.log('Sending webhook request:', {
+			url: webhookUrl,
+			method: shouldUseProxy ? 'POST (via proxy)' : method,
+			headers: requestOptions.headers,
 			payload,
+			useProxy: shouldUseProxy,
 		})
 
-		const response = await fetch(apiUrl, requestOptions)
+		let targetUrl = webhookUrl
 
-		console.log('API response:', {
+		if (shouldUseProxy) {
+			// Use our API proxy for AWS Amplify webhooks in browser
+			targetUrl = '/api/deploy'
+			requestOptions.body = JSON.stringify({ webhookUrl, payload })
+		}
+
+		const response = await fetch(targetUrl, requestOptions)
+
+		console.log('Webhook response:', {
 			status: response.status,
 			statusText: response.statusText,
 		})
 
 		// Get response body
 		const responseBody = await response.text()
-		console.log('API response body:', responseBody)
+		console.log('Webhook response body:', responseBody)
 
 		if (!response.ok) {
 			throw new Error(
@@ -47,33 +66,25 @@ export async function webhookTrigger(
 			)
 		}
 
-		// Parse the API response
+		// Try to parse the response
 		try {
-			const apiResponse = JSON.parse(responseBody)
-			if (apiResponse.success) {
-				console.log('✅ AWS Amplify webhook successful via API proxy')
-				if (apiResponse.response) {
-					// Try to parse the AWS response from our API
-					try {
-						const awsResponse = JSON.parse(apiResponse.response)
-						if (awsResponse.SendMessageResponse?.SendMessageResult?.MessageId) {
-							console.log(
-								'✅ AWS Amplify webhook successful - Message ID:',
-								awsResponse.SendMessageResponse.SendMessageResult.MessageId,
-							)
-						}
-					} catch (parseError) {
-						console.log('AWS response is not valid JSON')
-					}
+			const parsedResponse = JSON.parse(responseBody)
+			if (parsedResponse.success) {
+				console.log('✅ Webhook triggered successfully')
+				if (parsedResponse.response) {
+					console.log('Response details:', parsedResponse.response)
 				}
 			} else {
-				throw new Error(apiResponse.message || 'Unknown API error')
+				throw new Error(parsedResponse.message || 'Unknown webhook error')
 			}
 		} catch (parseError) {
-			console.log('API response is not valid JSON')
+			// If response is not JSON, that's okay for some webhooks
+			console.log(
+				'Webhook response is not JSON (this is normal for some webhooks)',
+			)
 		}
 
-		console.log(`Webhook triggered successfully via API proxy`)
+		console.log(`Webhook triggered successfully`)
 	} catch (error) {
 		console.error('Webhook trigger error:', error)
 		throw error

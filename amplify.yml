@@ -11,6 +11,9 @@ frontend:
       commands:
         - echo "=== Environment Variables ==="
         - env | grep -e SANITY_API_READ_TOKEN -e NEXT_PUBLIC_ -e AMPLIFY_WEBHOOK_URL
+        - echo "=== AMPLIFY_WEBHOOK_URL Debug ==="
+        - echo "AMPLIFY_WEBHOOK_URL: $AMPLIFY_WEBHOOK_URL"
+        - echo "AMPLIFY_WEBHOOK_URL length: ${#AMPLIFY_WEBHOOK_URL}"
         - echo "=== Node Version ==="
         - node --version
         - echo "=== PNPM Version ==="
