@@ -14,6 +14,17 @@ export async function webhookTrigger(
 	// Check if we're in a browser environment (Sanity Studio)
 	const isBrowser = typeof window !== 'undefined'
 
+	// Validate webhook URL
+	if (
+		!webhookUrl ||
+		webhookUrl ===
+			'https://webhooks.amplify.us-east-1.amazonaws.com/prod/webhooks'
+	) {
+		throw new Error(
+			'Invalid webhook URL. Please configure AMPLIFY_WEBHOOK_URL environment variable with a complete webhook URL including id, token, and operation parameters.',
+		)
+	}
+
 	// For AWS Amplify webhooks in the browser, we need to use our API proxy
 	// to avoid CORS issues
 	const shouldUseProxy =
@@ -39,6 +50,7 @@ export async function webhookTrigger(
 			headers: requestOptions.headers,
 			payload,
 			useProxy: shouldUseProxy,
+			isBrowser,
 		})
 
 		let targetUrl = webhookUrl

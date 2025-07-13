@@ -27,6 +27,7 @@ export function DeployButton({
 		message: string
 		timestamp: string
 	} | null>(null)
+	const [isConfigLoading, setIsConfigLoading] = useState(false)
 
 	const handleDeploy = async () => {
 		setIsLoading(true)
@@ -68,6 +69,11 @@ export function DeployButton({
 					<Text size={1} muted>
 						{text}
 					</Text>
+					{!webhookUrl && (
+						<Text size={1} style={{ marginTop: '8px', color: '#f59e0b' }}>
+							⚠️ Webhook URL not configured. Check environment variables.
+						</Text>
+					)}
 				</Box>
 
 				<Stack space={2}>
@@ -75,18 +81,52 @@ export function DeployButton({
 						mode="ghost"
 						tone="primary"
 						onClick={handleDeploy}
-						disabled={isLoading}
-						text={isLoading ? 'Deploying...' : 'Deploy'}
+						disabled={isLoading || !webhookUrl}
+						text={
+							isLoading
+								? 'Deploying...'
+								: !webhookUrl
+									? 'No Webhook URL'
+									: 'Deploy'
+						}
 					/>
 					<Button
 						mode="ghost"
 						tone="caution"
-						onClick={() => {
-							console.log('Webhook URL:', webhookUrl)
-							console.log('Headers:', headers)
-							console.log('Method:', method)
+						onClick={async () => {
+							setIsConfigLoading(true)
+							try {
+								const response = await fetch('/api/deploy/config')
+								const data = await response.json()
+								console.log('=== Webhook Debug Info ===')
+								console.log('Webhook URL:', webhookUrl)
+								console.log('Webhook URL length:', webhookUrl.length)
+								console.log('API Config:', data)
+								console.log(
+									'Is valid URL:',
+									webhookUrl.includes('amplify.amazonaws.com'),
+								)
+								console.log(
+									'Has required params:',
+									webhookUrl.includes('id=') &&
+										webhookUrl.includes('token=') &&
+										webhookUrl.includes('operation='),
+								)
+								console.log('Headers:', headers)
+								console.log('Method:', method)
+								console.log(
+									'Environment:',
+									typeof window !== 'undefined' ? 'Browser' : 'Server',
+								)
+								console.log('========================')
+							} catch (error) {
+								console.error('Failed to get config:', error)
+							} finally {
+								setIsConfigLoading(false)
+							}
 						}}
-						text="Debug Info"
+						disabled={isConfigLoading}
+						text={isConfigLoading ? 'Loading...' : 'Debug Info'}
 					/>
 				</Stack>
 
