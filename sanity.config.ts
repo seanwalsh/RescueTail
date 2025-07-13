@@ -1,3 +1,5 @@
+'use client'
+
 import pkg from './package.json'
 import { defineConfig } from 'sanity'
 import { projectId, dataset, apiVersion } from '@/sanity/lib/env'
@@ -30,7 +32,7 @@ export default defineConfig({
 	plugins: [
 		structure,
 		webhookTriggerPlugin({
-			webhookUrl: process.env.AMPLIFY_WEBHOOK_URL || '',
+			webhookUrl: '', // Will be loaded from API in the browser
 			title: 'Deploy',
 			text: 'Deploy to AWS Amplify',
 			method: 'POST',
