@@ -31,10 +31,13 @@ export const webhookTriggerPlugin = definePlugin<WebhookTriggerConfig>(
 								typeof window !== 'undefined' &&
 								(!webhookUrl || webhookUrl === '')
 							) {
+								console.log('Loading webhook URL from API...')
 								fetch('/api/deploy/config')
 									.then((res) => res.json())
 									.then((data) => {
+										console.log('API response:', data)
 										if (data.webhookUrl) {
+											console.log('Setting webhook URL:', data.webhookUrl)
 											setWebhookUrl(data.webhookUrl)
 										}
 									})
@@ -42,7 +45,7 @@ export const webhookTriggerPlugin = definePlugin<WebhookTriggerConfig>(
 										console.error('Failed to get webhook URL from API:', err)
 									})
 							}
-						}, [webhookUrl])
+						}, []) // Empty dependency array to run only once
 
 						return React.createElement(DeployButton, {
 							webhookUrl,

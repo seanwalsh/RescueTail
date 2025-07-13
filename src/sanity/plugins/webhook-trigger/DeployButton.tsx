@@ -92,6 +92,27 @@ export function DeployButton({
 					/>
 					<Button
 						mode="ghost"
+						tone="primary"
+						onClick={async () => {
+							setIsConfigLoading(true)
+							try {
+								const response = await fetch('/api/deploy/config')
+								const data = await response.json()
+								if (data.webhookUrl) {
+									// Force a page reload to update the webhook URL
+									window.location.reload()
+								}
+							} catch (error) {
+								console.error('Failed to refresh config:', error)
+							} finally {
+								setIsConfigLoading(false)
+							}
+						}}
+						disabled={isConfigLoading}
+						text={isConfigLoading ? 'Refreshing...' : 'Refresh Config'}
+					/>
+					<Button
+						mode="ghost"
 						tone="caution"
 						onClick={async () => {
 							setIsConfigLoading(true)
@@ -99,9 +120,10 @@ export function DeployButton({
 								const response = await fetch('/api/deploy/config')
 								const data = await response.json()
 								console.log('=== Webhook Debug Info ===')
-								console.log('Webhook URL:', webhookUrl)
-								console.log('Webhook URL length:', webhookUrl.length)
+								console.log('Current webhook URL:', webhookUrl)
+								console.log('Current webhook URL length:', webhookUrl.length)
 								console.log('API Config:', data)
+								console.log('API Debug Info:', data.debug)
 								console.log(
 									'Is valid URL:',
 									webhookUrl.includes('amplify.amazonaws.com'),
