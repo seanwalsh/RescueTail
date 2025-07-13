@@ -43,10 +43,10 @@ export default defineConfig({
 			},
 		}),
 		presentation,
-		dashboardTool({
-			name: 'deployment',
-			title: 'Deployment',
-		}),
+		// dashboardTool({
+		// 	name: 'deployment',
+		// 	title: 'Deployment',
+		// }),
 		dashboardTool({
 			name: 'info',
 			title: 'Info',
